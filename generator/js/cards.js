@@ -24,6 +24,7 @@ function card_default_data() {
         count: 1,
         title: "New card",
         contents: [],
+        contents_back: [],
         tags: []
     };
 }
@@ -31,6 +32,7 @@ function card_default_data() {
 function card_init(card) {
     card.title = card.title || "";
     card.contents = card.contents || [];
+    card.contents_back = card.contents_back || [];
     card.tags = card.tags || [];
 }
 
@@ -390,14 +392,19 @@ function card_generate_back(data, options) {
     var result = "";
     console.log('options.rounded_corners', options.rounded_corners);
     result += '<div class="card card-size-' + options.card_size + ' ' + (options.rounded_corners ? 'rounded-corners' : '') + '" ' + style_color + '>';
-    result += '  <div class="card-back" ' + background_style + '>';
-	if (!url)
-	{
-		result += '    <div class="card-back-inner">';
-		result += '      <div class="card-back-icon icon-' + icon + '" ' + style_color + '></div>';
-		result += '    </div>';
-	}
-    result += '  </div>';
+    if (!data.contents_back.length) {
+        result += '  <div class="card-back" ' + background_style + '>';
+        if (!url)
+        {
+            result += '    <div class="card-back-inner">';
+            result += '      <div class="card-back-icon icon-' + icon + '" ' + style_color + '></div>';
+            result += '    </div>';
+        }
+        result += '  </div>';
+    }
+    else {
+        result += card_generate_contents(data.contents_back, data, options)
+    }
     result += '</div>';
 
     return result;
